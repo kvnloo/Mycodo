@@ -198,7 +198,12 @@ class CustomModule(AbstractFunction):
 
         if not last_measurement or last_measurement[1] is None:
             self.logger.error("No measurement available. Cannot operate without measurement. Turning output Off.")
-            self.control.output_off(self.output_device_id, output_channel=self.output_channel)
+            if self.direction in ['raise', 'both']:
+                self.control.output_off(
+                    self.output_raise_device_id, output_channel=self.output_raise_channel)
+            if self.direction in ['lower', 'both']:
+                self.control.output_off(
+                    self.output_lower_device_id, output_channel=self.output_lower_channel)
             return
 
         if self.direction == 'raise':
